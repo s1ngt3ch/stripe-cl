@@ -83,3 +83,26 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+date_default_timezone_set('Asia/Kolkata');
+$root = "http://" . $_SERVER['HTTP_HOST'];
+$currentDir = str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+$root .= $currentDir;
+$constants['base_url'] = $root;
+define('DB_HOSTNAME', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'root');
+define('DB_NAME', 'demo_DB');
+// windows path
+//define('BASH_PATH', 'C:/xampp/htdocs'.$currentDir);
+// Ubuntu path
+define('BASH_PATH', '/var/www'.$currentDir);
+// Mac Path
+//define('BASH_PATH', '/Applications/XAMPP/htdocs'.$currentDir);
+define('HTTP_CSS_PATH', $constants['base_url'] . 'assets/css/');
+define('HTTP_JS_PATH', $constants['base_url'] . 'assets/js/');
+define('HTTP_IMAGE_PATH', $constants['base_url'] . 'assets/images/');
+
+define('STRIPE_PUBLISHABLE_KEY', 'pk_test_bp0hgenwLtjlkLSGZCCZfaLy00qyh25x7r');
+define('STRIPE_SECRET_KEY', 'sk_test_b73hMjWizHrLSw6iS1EO6zqL00CxsUqewp');
+define('CURRENCY_CODE', 'usd'); 
