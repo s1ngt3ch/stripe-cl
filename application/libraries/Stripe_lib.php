@@ -28,7 +28,8 @@ class Stripe_lib{
         $this->CI->load->config('stripe'); 
          
         // Include the Stripe PHP bindings library 
-        require APPPATH .'third_party/stripe-php/init.php'; 
+        // require APPPATH .'third_party/stripe-php/init.php'; 
+        require APPPATH .'../vendor/stripe/stripe-php/init.php'; 
          
         // Set API key 
         \Stripe\Stripe::setApiKey($this->CI->config->item('stripe_api_key')); 

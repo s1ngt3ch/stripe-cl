@@ -92,7 +92,8 @@ $constants['base_url'] = $root;
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
-define('DB_NAME', 'demo_DB');
+// define('DB_NAME', 'demo_DB');
+define('DB_NAME', 'stripe_api');
 // windows path
 //define('BASH_PATH', 'C:/xampp/htdocs'.$currentDir);
 // Ubuntu path
