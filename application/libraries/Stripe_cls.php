@@ -1,11 +1,15 @@
-class Stripe {
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Stripe_cls
+{
     public $headers;
     public $url = 'https://api.stripe.com/v1/';
     public $method = null;
     public $fields = array();
     
     function __construct () {
-        $this->headers = array('Authorization: Bearer '.STRIPE_API_KEY); // STRIPE_API_KEY = your stripe api key
+        //$this->headers = array('Authorization: Bearer '.STRIPE_API_KEY); // STRIPE_API_KEY = your stripe api key
+        $this->headers = array('Authorization: Bearer '."sk_test_51LmHcZDuPeFawTq3mpEPJIsEvC2zgyrnu8lJTWxwX2t26HlUWqN8NyiZbxE0DQTEtcVmVu66NJh7LM3C7t5Iexam00DYGYQ7Z5"); // STRIPE_API_KEY = your stripe api key
     }
     
     function call () {
@@ -38,24 +42,5 @@ class Stripe {
     }
 }
 
-// create customer and use email to identify them in stripe
-$s = new Stripe();
-$s->url .= 'customers';
-$s->method = "POST";
-$s->fields['email'] = $_POST['email'];
-$customer = $s->call();
-
-// create customer subscription with credit card and plan
-$s = new Stripe();
-$s->url .= 'customers/'.$customer['id'].'/subscriptions';
-$s->method = "POST";
-$s->fields['plan'] = $_POST['plan']; // name of the stripe plan i.e. my_stripe_plan
-// credit card details
-$s->fields['source'] = array(
-    'object' => 'card',
-    'exp_month' => $_POST['card_exp_month'],
-    'exp_year' => $_POST['card_exp_year'],
-    'number' => $_POST['card_number'],
-    'cvc' => $_POST['card_cvc']
-);
-$subscription = $s->call();
+/* End of file Stripe_cls.php */
+/* Location: ./application/libraries/Stripe_cls.php */
