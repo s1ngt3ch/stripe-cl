@@ -75,30 +75,4 @@ class Stripe_client extends CI_Controller{
 		 */
 	}
 	
-	function create_charge()
-	{
-		$this->load->library('stripe_cls');
-
-		// create customer and use email to identify them in stripe
-		$s = new Stripe_cls();
-		$s->url .= 'customers';
-		$s->method = "POST";
-		$s->fields['email'] = $_POST['email'];
-		$customer = $s->call();
-
-		// create customer subscription with credit card and plan
-		$s = new Stripe_cls();
-		$s->url .= 'customers/'.$customer['id'].'/subscriptions';
-		$s->method = "POST";
-		$s->fields['plan'] = $_POST['plan']; // name of the stripe plan i.e. my_stripe_plan
-		// credit card details
-		$s->fields['source'] = array(
-			'object' => 'card',
-			'exp_month' => $_POST['card_exp_month'],
-			'exp_year' => $_POST['card_exp_year'],
-			'number' => $_POST['card_number'],
-			'cvc' => $_POST['card_cvc']
-		);
-		$subscription = $s->call();
-	}
 }
