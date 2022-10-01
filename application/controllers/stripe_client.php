@@ -18,8 +18,16 @@ class Stripe_client extends CI_Controller{
 
 	public function index()
     {
-		$data['items'] = json_decode($this->curl->simple_get($this->url.'/item'));
-        $this->load->view('rest_client',$data);
+		$links = array( 
+			"Link 1 - create_cust"=>"create_cust", 
+			"Link 2 - create_price"=>"create_price", 
+			"Link 3 - create_charge"=>"create_charge",
+			"Link 4 - create_cardholder"=>"create_cardholder" 
+		); 
+	 
+		foreach($links as $text=>$url) { 
+			echo '<a href="'.$url.'">'.$text.'</a><br/>'; 
+		} 
     }
 	
 	function create_cust()
@@ -75,4 +83,61 @@ class Stripe_client extends CI_Controller{
 		 */
 	}
 	
+	function create_charge()
+	{
+		$this->load->library('stripe_cls');
+
+		// create customer and use email to identify them in stripe
+		$s = new Stripe_cls();
+		$s->url .= 'customers';
+		$s->method = "POST";
+		$s->fields['email'] = 'email@example.com';
+		$customer = $s->call();
+		echo json_encode($customer);
+
+		// create customer subscription with credit card and plan
+		$s = new Stripe_cls();
+		$s->url .= 'customers/'.$customer['id'].'/subscriptions';
+		$s->method = "POST";
+		$s->fields['plan'] ='my_plan'; // name of the stripe plan i.e. my_stripe_plan
+		// credit card details
+		$s->fields['source'] = array(
+			'object' => 'card',
+			'exp_month' => '10',
+			'exp_year' => '2023',
+			'number' => '123456789123456',
+			'cvc' => '123'
+		);
+		$subscription = $s->call();
+		echo json_encode($subscription);
+	}
+
+	function create_cardholder()
+	{
+		$this->load->library('stripe_cls');
+
+		// create customer and use email to identify them in stripe
+		$s = new Stripe_cls();
+		$s->url .= 'issuing/cardholders';
+		$s->method = "POST";
+		$s->fields = [
+			'name' => 'Jenny Rosen',
+			'email' => 'jenny.rosen@example.com',
+			'phone_number' => '+18008675309',
+			'status' => 'active',
+			'type' => 'individual',
+			'billing' => [
+			  'address' => [
+				'line1' => '123 Main Street',
+				'city' => 'San Francisco',
+				'state' => 'CA',
+				'postal_code' => '94111',
+				'country' => 'SG',
+			  ],
+			],
+		  ];
+		  $cardholder = $s->call();
+		echo json_encode($cardholder);
+	}
+
 }

@@ -20,7 +20,7 @@ class Stripe_cls
            case "POST":
               curl_setopt($ch, CURLOPT_POST, 1);
               if ($this->fields)
-                 curl_setopt($ch, CURLOPT_POSTFIELDS, $this->fields);
+                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->fields));
               break;
            case "PUT":
               curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
