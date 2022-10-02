@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Rest_client extends CI_Controller{
-	var	$url = 'http://localhost/ci-rest-server/index.php/api/item';
+	var	$url = 'http://localhost/ci-rest-server/index.php/api/example/';
 	var	$username = 'admin';
 	var	$password = '1234';
 	
@@ -11,29 +11,29 @@ class Rest_client extends CI_Controller{
 		parent::__construct();
 
 		$this->load->library('curl');
-		$this->load->library('rest');
 		$this->load->helper('url');
 	}
 
 	public function index()
     {
-		$data['items'] = json_decode($this->curl->simple_get($this->url));
+		$data['users'] = json_decode($this->curl->simple_get($this->url.'users'));
         $this->load->view('rest_client',$data);
     }
 	
-	function native_curl($new_name, $new_email)
+	function native_curl($name_new, $email_new)
 	{		
 		// Alternative JSON version
 		// $url = 'http://twitter.com/statuses/update.json';
 		// Set up and execute the curl process
 		$curl_handle = curl_init();
 		
-		curl_setopt($curl_handle, CURLOPT_URL, $this->url.'users/id/1/format/json');
+		curl_setopt($curl_handle, CURLOPT_URL, $this->url.'users');
+		// curl_setopt($curl_handle, CURLopt, 1);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl_handle, CURLOPT_POST, 1);
 		curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-		'name' => $new_name,
-		'email' => $new_email
+		'name' => $name_new,
+		'email' => $email_new
 		));
 
 		// Optional, delete this line if your API is open
@@ -41,7 +41,7 @@ class Rest_client extends CI_Controller{
 
 		$buffer = curl_exec($curl_handle);
 		curl_close($curl_handle);
-
+		
 		$result = json_decode($buffer);
 
 		if(isset($result->status) && $result->status == 'success')
@@ -58,7 +58,7 @@ class Rest_client extends CI_Controller{
 	{ 
 		$this->load->library('curl'); 
 
-		$this->curl->create($this->url.'users/id/1/format/json'); 
+		$this->curl->create($this->url.'users'); 
 
 		// Optional, delete this line if your API is open 
 		//$this->curl->http_login($this->username, $this->password); 
@@ -82,18 +82,16 @@ class Rest_client extends CI_Controller{
 		} 
 	} 
 
-	public function item()
+	public function user()
 	{
 		//very simple php function file_get_contents()
 		//$item = json_decode(file_get_contents($this->url.'item/3/format/json'));
 		//$result = $item->title;
 		
 		// Simple call to remote URL
-		$result = $this->curl->simple_get($this->url.'item');
-		
-		$data= array(
-			//'item'		=> $item
-			'result'	=> $result
+		$result = $this->curl->simple_get($this->url.'users');
+		$data = array(
+			'users'	=> json_decode( $result )
 			);
 			
 		// Simple call to CI URI
@@ -105,16 +103,16 @@ class Rest_client extends CI_Controller{
 		//$this->curl->simple_get($url, array(CURLOPT_PORT => 8080));
 		//$this->curl->simple_post($url, array('foo'=>'bar'), array(CURLOPT_BUFFERSIZE => 10)); 
 		
-		$this->load->view("rest_client2", $data);
+		$this->load->view("rest_client", $data);
 	}
 	
-	public function item2()
+	public function user_adv()
 	{
 		// Advanced calls
 		// These methods allow you to build a more complex request.
 
 		// Start session (also wipes existing/previous sessions)
-		$this->curl->create($this->url.'item');
+		$this->curl->create($this->url.'users');
 
 		// Option & Options
 		$this->curl->option(CURLOPT_BUFFERSIZE, 10);
@@ -143,11 +141,11 @@ class Rest_client extends CI_Controller{
 		//$this->curl->proxy_login('username', 'password');
 
 		// Execute - returns responce
-		echo $this->curl->execute();
+		// echo $this->curl->execute();
 		// Execute - returns responce
-		//$result = $this->curl->execute();
-		//$user = json_decode($result);
-		//$this->load->view("rest_client", array('result' => $result, 'user' => $user));
+		$result = $this->curl->execute();
+		$users = json_decode($result);
+		$this->load->view("rest_client", array('result' => $result, 'users' => $users));
 		
 		// Debug data ------------------------------------------------
 
@@ -162,17 +160,29 @@ class Rest_client extends CI_Controller{
 	//using REST client library
 	function rest_client_example($id)
 	{
-		$this->load->library('rest', array(
-			'server' => $this->url.'/',
-			//'server' => 'http://localhost/ci_restserver/index.php/api/example/',
-			//'http_user' => 'admin',
-			//'http_pass' => '1234',
-			'http_auth' => 'none'	//'basic' // or 'digest'
-		));
+		// Load the rest client spark
+		// $this->load->spark('restclient/2.2.1');
 
-		$user = $this->rest->get('index.php', array('id' => $id), 'json');
-		//$user = $this->rest->get('users', array('id' => $id), 'json');
-		//$user = $this->rest->get('users', array('id' => $id), 'application/json');
+		// Load the library
+		$this->load->library('rest');
+
+		// Set config options (only 'server' is required to work)
+		$config = array('server' 			=> $this->url,
+						//'api_key'			=> 'Setec_Astronomy'
+						//'api_name'		=> 'X-API-KEY'
+						//'http_user' 		=> 'username',
+						//'http_pass' 		=> 'password',
+						'http_auth' 		=> 'none'	//'basic' // or 'digest'
+						//'ssl_verify_peer' => TRUE,
+						//'ssl_cainfo' 		=> '/certs/cert.pem'
+						);
+
+		// Run some setup
+		$this->rest->initialize($config);
+
+		// Pull in an array
+		$user = $this->rest->get('users', array('id' => $id), 'json');
+		// $user = $this->rest->get('users', array('id' => $id), 'application/json');
 		
 		/*
 		As you have probably guessed as well as 
@@ -185,42 +195,41 @@ class Rest_client extends CI_Controller{
 		*/
 		
 		//encode : object -> string; decode : string -> object
-		var_dump($user);
 		$result = json_encode($user);
-		var_dump($result);
 		echo $result;
-		// $this->load->view("rest_client", array('result' => $result, 'user' => $user));
-		//echo $this->rest->debug();
-		
+	
 	}
 	
 	//using REST client library
 	function sample($new_name,$new_email)
 	{
-		$this->load->library('rest', array(
-			'server' => $this->url.'/',
-			//'http_user' => $this->username,
-			//'http_pass' => $this->password,
-			'http_auth' => 'none'	//'basic' // or 'digest'
-		));
+		// Load the library
+		$this->load->library('rest');
 
-		$user = $this->rest->post('index.php',array(
-				'title' => $new_name, 
-				'description' => $new_email), 
-				'json');
-		// debug_to_console("Test");
+		// Set config options (only 'server' is required to work)
+		$config = array('server' 			=> $this->url,
+						//'api_key'			=> 'Setec_Astronomy'
+						//'api_name'		=> 'X-API-KEY'
+						//'http_user' 		=> 'username',
+						//'http_pass' 		=> 'password',
+						'http_auth' 		=> 'none'	//'basic' // or 'digest'
+						//'ssl_verify_peer' => TRUE,
+						//'ssl_cainfo' 		=> '/certs/cert.pem'
+						);
+
+		// Run some setup
+		$this->rest->initialize($config);
+
+		// Push in an array
+		$user = $this->rest->post('users',array(
+				'name'  => $new_name, 
+				'email' => $new_email
+				// 'json'
+				));
+		
 		//encode : object -> string; decode : string -> object
 		$result = json_encode($user);
 		echo $new_name.' : '.$new_email.' : '.$result;
-		//$this->load->view("rest_client", array('result' => $result, 'user' => $user));
-		//echo $this->rest->debug();
 	}	
 	
-	// function debug_to_console($data) {
-	// 	$output = $data;
-	// 	if (is_array($output))
-	// 		$output = implode(',', $output);
-	
-	// 	echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-	// }
 }

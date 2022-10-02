@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Test_client extends CI_Controller{
-	var	$url = 'http://localhost/ci-rest-server/index.php/api/item';
+	var	$url = 'http://localhost/ci-rest-server/index.php/api/item/';
 	var	$username = 'admin';
 	var	$password = '1234';
 	
@@ -49,7 +49,7 @@ class Test_client extends CI_Controller{
                 'id'          =>  $this->input->post('id'),
                 'title'       =>  $this->input->post('title'),
                 'description' =>  $this->input->post('description'));
-            $update =  $this->curl->simple_put($this->url.'/index', $data, array(CURLOPT_BUFFERSIZE => 10)); 
+            $update =  $this->curl->simple_put($this->url.'index', $data, array(CURLOPT_BUFFERSIZE => 10)); 
             if($update)
             {
                 $this->session->set_flashdata('result','Update successfully');
@@ -79,8 +79,7 @@ class Test_client extends CI_Controller{
             // var_dump($delete);
             // $delete =  $this->curl->simple_delete($this->url.'/index/id/1', array(CURLOPT_BUFFERSIZE => 10)); 
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $this->url.'/index/id'.$id);
-            curl_setopt($curl, CURLOPT_URL, $this->url.'/index/'.$id);
+            curl_setopt($curl, CURLOPT_URL, $this->url.'index/id/'.$id);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             $response = curl_exec($curl);

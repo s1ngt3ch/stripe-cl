@@ -95,15 +95,15 @@ define('DB_PASSWORD', 'root');
 // define('DB_NAME', 'demo_DB');
 define('DB_NAME', 'stripe_api');
 // windows path
-//define('BASH_PATH', 'C:/xampp/htdocs'.$currentDir);
+define('BASH_PATH', 'C:/MAMP/htdocs'.$currentDir);
 // Ubuntu path
-define('BASH_PATH', '/var/www'.$currentDir);
+// define('BASH_PATH', '/var/www'.$currentDir);
 // Mac Path
 //define('BASH_PATH', '/Applications/XAMPP/htdocs'.$currentDir);
 define('HTTP_CSS_PATH', $constants['base_url'] . 'assets/css/');
 define('HTTP_JS_PATH', $constants['base_url'] . 'assets/js/');
 define('HTTP_IMAGE_PATH', $constants['base_url'] . 'assets/images/');
 
-define('STRIPE_PUBLISHABLE_KEY', 'pk_test_bp0hgenwLtjlkLSGZCCZfaLy00qyh25x7r');
-define('STRIPE_SECRET_KEY', 'sk_test_b73hMjWizHrLSw6iS1EO6zqL00CxsUqewp');
+define('STRIPE_PUBLISHABLE_KEY', 'pk_test_51LmHcZDuPeFawTq3CSu0ryg8rSO1uESUo19nvKFzZkhE7lvIrrRFoE6a6buckW6f3HpXMvnQfLiYEzhdZJqtWYP100uioY2u8U');
+define('STRIPE_SECRET_KEY', 'sk_test_51LmHcZDuPeFawTq3mpEPJIsEvC2zgyrnu8lJTWxwX2t26HlUWqN8NyiZbxE0DQTEtcVmVu66NJh7LM3C7t5Iexam00DYGYQ7Z5');
 define('CURRENCY_CODE', 'usd'); 

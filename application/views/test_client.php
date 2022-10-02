@@ -2,15 +2,15 @@
 <?php echo 'Rest Client'; ?>
 </font>
 <table border="1">
-    <tr><th>ID</th><th>NAME</th><th>EMAIL</th><th></th></tr>
+    <tr><th>ID</th><th>TITLE</th><th>DESCRIPTION</th><th></th></tr>
     <?php
-    foreach ($users as $user){
+    foreach ($items as $item){
         echo "<tr>
-              <td>$user->id</td>
-              <td>$user->name</td>
-              <td>$user->email</td>
-              <td>".anchor('rest_client/edit/'.$user->id,'Edit')."
-                  ".anchor('rest_client/delete/'.$user->id,'Delete')."</td>
+              <td>$item->id</td>
+              <td>$item->title</td>
+              <td>$item->description</td>
+              <td>".anchor('rest_client/edit/'.$item->id,'Edit')."
+                  ".anchor('rest_client/delete/'.$item->id,'Delete')."</td>
               </tr>";
     }
     ?>
