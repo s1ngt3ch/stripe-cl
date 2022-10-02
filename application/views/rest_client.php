@@ -24,8 +24,8 @@
             Click on the links to check whether the REST client is working.
         </p>
         <ol>
-            <li><a href="<?php echo site_url('/rest_client/rest_client_example/9'); ?>">sample 1</a> - using REST client library 1</li>
-            <li><a href="<?php echo site_url('/rest_client/sample/buk12/buku 12'); ?>">sample 2</a> - using REST client library 2</li>
+            <li><a href="<?php echo site_url('/rest_client/rest_client_example/2'); ?>">sample 1</a> - using REST client library 1</li>
+            <li><a href="<?php echo site_url('/rest_client/sample/fulan/fulan_at_email.com'); ?>">sample 2</a> - using REST client library 2</li>
         </ol>
     </div>
     <p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>'.CI_VERSION.'</strong>' : '' ?></p>
