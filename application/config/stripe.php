@@ -13,6 +13,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |  stripe_publishable_key    string   Your Stripe API Publishable key. 
 |  stripe_currency           string   Currency code. 
 */ 
-$config['stripe_api_key']         = 'Your_API_Secret_key'; 
-$config['stripe_publishable_key'] = 'Your_API_Publishable_key'; 
-$config['stripe_currency']        = 'usd';
+$config['stripe_api_key']         = STRIPE_SECRET_KEY; 
+$config['stripe_publishable_key'] = STRIPE_PUBLISHABLE_KEY; 
+$config['stripe_currency']        = CURRENCY_CODE;

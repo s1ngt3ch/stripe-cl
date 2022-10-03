@@ -93,23 +93,75 @@ class Stripe_client extends CI_Controller{
 		$s->method = "POST";
 		$s->fields['email'] = 'email@example.com';
 		$customer = $s->call();
-		echo json_encode($customer);
+		echo 'customer : ', json_encode($customer), PHP_EOL;
 
+		// tokenize
+		$s = new Stripe_cls();
+		$s->url .= 'tokens';
+		$s->method = "POST";
+		$s->fields['card'] = [
+			  'number' => '4242424242424242',
+			  'exp_month' => 12,
+			  'exp_year' => 2034,
+			  'cvc' => '567',
+			// 'customer' => $customer['id'],
+		  ];
+		//   var_dump($s->fields);
+		$token = $s->call();
+		echo ' \r\ntokenize : ', json_encode($token), PHP_EOL;
+		var_dump($token['id']);
+
+		//payment method
+		$s = new Stripe_cls();
+		$s->url .= 'payment_methods';
+		$s->method = "POST";
+		$s->fields['type'] = 'card';
+		$s->fields['card'] = [
+			  'number' => '4242424242424242',
+			  'exp_month' => 12,
+			  'exp_year' => 2034,
+			  'cvc' => '567',
+			// 'customer' => $customer['id'],
+		  ];
+		$pmt_method = $s->call();
+		var_dump($pmt_method);
+		//SetupIntent
+		$s = new Stripe_cls();
+		$s->url .= 'setup_intents';
+		$s->method = "POST";
+		$s->fields = [
+			'payment_method_types'=>['card'],
+			'payment_method' => $pmt_method['id'],
+			'customer' => $customer['id'],
+			'description' => 'Great simple Uniq Cust Name',
+			// 'confirm' => true,
+			'usage' => "off_session"
+	  	];
+		$intent = $s->call();
+		var_dump($intent);
 		// create customer subscription with credit card and plan
 		$s = new Stripe_cls();
 		$s->url .= 'customers/'.$customer['id'].'/subscriptions';
 		$s->method = "POST";
-		$s->fields['plan'] ='my_plan'; // name of the stripe plan i.e. my_stripe_plan
+		$s->fields['items'] = [
+			'price_data' => [
+			  'unit_amount' => 5000,
+			  'currency' => 'usd',
+			  'product' => 'prod_456',
+			  'recurring' => [
+				'interval' => 'month',
+			  ],
+			],
+		  ];
 		// credit card details
-		$s->fields['source'] = array(
-			'object' => 'card',
-			'exp_month' => '10',
-			'exp_year' => '2023',
-			'number' => '123456789123456',
-			'cvc' => '123'
-		);
-		$subscription = $s->call();
-		echo json_encode($subscription);
+		// $s->fields['default_payment_method'] = $token['id'];
+		$s->fields['default_payment_method'] = $pmt_method['id'];
+		$stripe_sub = $s->call();
+		var_dump($stripe_sub);
+	 	$subscription_id = $stripe_sub['id'];
+	 	$subscription_item_id = $stripe_sub['items']['data'][0]['id'];
+
+		echo '\nsubscription : '. json_encode($stripe_sub), $subscription_id, $subscription_item_id;
 	}
 
 	function create_cardholder()
@@ -141,3 +193,25 @@ class Stripe_client extends CI_Controller{
 	}
 
 }
+
+// Set your secret key: remember to change this to your live secret key in production
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+\Stripe\Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+
+$cardholder = \Stripe\Issuing\Cardholder::create([
+    'name' => 'Jenny Rosen',
+    'email' => 'jenny.rosen@example.com',
+    'phone_number' => '+18008675309',
+    'status' => 'active',
+    'type' => 'individual',
+    'billing' => [
+        'name' => 'Jenny Rosen',
+        'address' => [
+            'line1' => '1234 Main Street',
+            'city' => 'San Francisco',
+            'state' => 'CA',
+            'postal_code' => '94111',
+            'country' => 'US',
+        ],
+    ],
+]);
