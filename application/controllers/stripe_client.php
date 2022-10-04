@@ -156,12 +156,13 @@ class Stripe_client extends CI_Controller{
 		// credit card details
 		// $s->fields['default_payment_method'] = $token['id'];
 		$s->fields['default_payment_method'] = $pmt_method['id'];
-		$stripe_sub = $s->call();
-		var_dump($stripe_sub);
-	 	$subscription_id = $stripe_sub['id'];
-	 	$subscription_item_id = $stripe_sub['items']['data'][0]['id'];
+		var_dump($s->fields);
+		// $stripe_sub = $s->call();
+		// var_dump($stripe_sub);
+	 	// $subscription_id = $stripe_sub['id'];
+	 	// $subscription_item_id = $stripe_sub['items']['data'][0]['id'];
 
-		echo '\nsubscription : '. json_encode($stripe_sub), $subscription_id, $subscription_item_id;
+		// echo '\nsubscription : '. json_encode($stripe_sub), $subscription_id, $subscription_item_id;
 	}
 
 	function create_cardholder()
